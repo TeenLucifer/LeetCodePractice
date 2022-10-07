@@ -3233,3 +3233,182 @@ int MultiQuestions::question547_DFS(vector<vector<int>> &isConnected)
     }
     return ans;
 }
+
+bool MultiQuestions::helper572(TreeNode *root, TreeNode *subRoot)
+{
+    if(root == nullptr && subRoot == nullptr) return true;
+    else if(root == nullptr && subRoot != nullptr) return false;
+    else if(root != nullptr && subRoot == nullptr) return false;
+    else if(root->val != subRoot->val) return false;
+
+    bool left = helper572(root->left, subRoot->left);
+    bool right = helper572(root->right, subRoot->right);
+
+    return (left && right);
+}
+
+bool MultiQuestions::question572(TreeNode *root, TreeNode *subRoot)
+{
+    //先遍历root中的每个节点，再判断以每个节点为根节点的子树是否与subRoot相同
+    stack<TreeNode*> stk;
+
+    while(!stk.empty() || root != nullptr)
+    {
+        while(root != nullptr)
+        {
+            stk.push(root);
+            root = root->left;
+        }
+        root = stk.top();
+        stk.pop();
+        TreeNode *node = root;
+        if(helper572(node, subRoot))
+        {
+            return true;
+        }
+        root = root->right;
+    }
+    return false;
+}
+
+int MultiQuestions::question1091(vector<vector<int>> &grid)
+{
+    if(grid[0][0] != 0)
+    {
+        return -1;
+    }
+
+    int ans = 1;
+    int m = grid.size();
+    int n = grid[0].size();
+    vector<vector<int>> visited(m, vector<int>(n, 0));
+    queue<pair<int, int>> que;
+    pair<int, int> dir[8] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},
+                             {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    que.push({0, 0});
+    while(!que.empty())
+    {
+        int size = que.size();
+        for(int i = 0; i < size; ++i)
+        {
+            pair<int, int> pos = que.front();
+            int x = pos.first;
+            int y = pos.second;
+            que.pop();
+            for(int j = 0; j < 8; ++j)
+            {
+                int x_new = x + dir[j].first;
+                int y_new = y + dir[j].second;
+                if(x_new == m - 1 && y_new == n - 1)
+                {
+                    return ans + 1;
+                }
+                if(x_new >= 0 && x_new < m && y_new >= 0 && y_new < n && grid[x_new][y_new] == 0 && visited[x_new][y_new] == 0)
+                {
+                    visited[x_new][y_new] = 1;
+                    que.push({x_new, y_new});
+                }
+            }
+        }
+        ans++;
+    }
+    return -1;
+}
+
+void MultiQuestions::question130(vector<vector<char>>& board)
+{
+    int m = board.size();
+    int n = board[0].size();
+    vector<vector<int>> visited(m, vector<int>(n, 0));
+    queue<pair<int, int>> que;
+    pair<int, int> dir[4] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    for(int t = 0; t < 2; ++t)
+    {
+        int j = t * (n - 1);
+        for(int i = 0; i < m; ++i)
+        {
+            if(board[i][j] == 'O' && visited[i][j] == 0)
+            {
+                visited[i][j] = 1;
+                que.push({i, j});
+                while(!que.empty())
+                {
+                    pair<int, int> pos = que.front();
+                    que.pop();
+                    for(int k = 0; k < 4; ++k)
+                    {
+                        int x = pos.first + dir[k].first;
+                        int y = pos.second + dir[k].second;
+                        if(x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'O' && visited[x][y] == 0)
+                        {
+                            visited[x][y] = 1;
+                            que.push({x, y});
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for(int t = 0; t < 2; ++t)
+    {
+        int i = t * (m - 1);
+        for(int j = 0; j < n; ++j)
+        {
+            if(board[i][j] == 'O' && visited[i][j] == 0)
+            {
+                visited[i][j] = 1;
+                que.push({i, j});
+                while(!que.empty())
+                {
+                    pair<int, int> pos = que.front();
+                    que.pop();
+                    for(int k = 0; k < 4; ++k)
+                    {
+                        int x = pos.first + dir[k].first;
+                        int y = pos.second + dir[k].second;
+                        if(x >= 0 && x < m && y >= 0 && y < n && board[x][y] == 'O' && visited[x][y] == 0)
+                        {
+                            visited[x][y] = 1;
+                            que.push({x, y});
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for(int i = 0; i < m; ++i)
+    {
+        for(int j = 0; j < n; ++j)
+        {
+            if(visited[i][j] == 0 && board[i][j] == 'O')
+            {
+                board[i][j] = 'X';
+            }
+        }
+    }
+}
+
+void MultiQuestions::helper797(vector<vector<int>> &graph, vector<int> path, int node, vector<vector<int>>& ans)
+{
+    int n = graph.size();
+    path.push_back(node);
+    if(node == n - 1)
+    {
+        ans.push_back(path);
+    }
+    for(int i = 0; i < graph[node].size(); ++i)
+    {
+        helper797(graph, path, graph[node][i], ans);
+    }
+}
+
+vector<vector<int>> MultiQuestions::question797(vector<vector<int>> &graph)
+{
+    vector<vector<int>> ans;
+    vector<int> path;
+    helper797(graph, path, 0, ans);
+    return ans;
+}

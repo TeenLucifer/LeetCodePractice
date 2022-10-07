@@ -4,13 +4,10 @@
 int main()
 {
     MultiQuestions *multiQuestions = new MultiQuestions();
-    vector<vector<char>> grid = {{'1', '1', '0', '0', '0'},
-                                 {'1', '1', '0', '0', '0'},
-                                 {'0', '0', '1', '0', '0'},
-                                 {'0', '0', '0', '1', '1'}};
-    vector<vector<int>> isConnected = {{1, 1, 0},
-                                       {1, 1, 0},
-                                       {0, 0, 1}};
-    multiQuestions->question547_BFS(isConnected);
+    vector<vector<char>> board = {{'X','O','X','O','X','O'},
+                                  {'O','X','O','X','O','X'},
+                                  {'X','O','X','O','X','O'},
+                                  {'O','X','O','X','O','X'}};
+    multiQuestions->question130(board);
     return 0;
 }

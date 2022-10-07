@@ -127,6 +127,10 @@ public:
     int question200_DFS(vector<vector<char>>& grid);
     int question547_BFS(vector<vector<int>>& isConnected);
     int question547_DFS(vector<vector<int>>& isConnected);
+    bool question572(TreeNode* root, TreeNode* subRoot);
+    int question1091(vector<vector<int>>& grid);
+    void question130(vector<vector<char>>& board);
+    vector<vector<int>> question797(vector<vector<int>>& graph);
 
     template<typename T1, typename T2>
     void quickSort(T1& array, int low, int high);
@@ -162,6 +166,8 @@ private:
     void helper200_DFS(vector<vector<char>>& grid, vector<vector<int>>& map, int x, int y);
     int helper547_BFS(vector<vector<int>>& isConnected, vector<int>& visited, int x, int y);
     void helper547_DFS(vector<vector<int>>& isConnected, vector<int>& visited, int x, int y);
+    bool helper572(TreeNode* root, TreeNode *subRoot);
+    void helper797(vector<vector<int>>& graph, vector<int> path, int node, vector<vector<int>>& ans);
     int getTreeHeight(TreeNode* node);
 };
 
