@@ -3412,3 +3412,119 @@ vector<vector<int>> MultiQuestions::question797(vector<vector<int>> &graph)
     helper797(graph, path, 0, ans);
     return ans;
 }
+
+void MultiQuestions::helper78(vector<int> &nums, vector<vector<int>> &ans, vector<int> subSet, int cur)
+{
+    if(cur == nums.size())
+    {
+        ans.push_back(subSet);
+        return;
+    }
+    subSet.push_back(nums[cur]);
+    helper78(nums, ans, subSet, cur + 1);
+    subSet.pop_back();
+    helper78(nums, ans, subSet, cur + 1);
+}
+
+vector<vector<int>> MultiQuestions::question78(vector<int> &nums)
+{
+    vector<vector<int>> ans;
+    vector<int> subSet;
+    helper78(nums, ans, subSet, 0);
+    return ans;
+}
+
+void MultiQuestions::helper90(vector<int> &nums, vector<vector<int>> &ans, vector<int> subSet, int cur, bool choosePre)
+{
+   if(cur == nums.size())
+   {
+       ans.push_back(subSet);
+       return;
+   }
+   helper90(nums, ans, subSet, cur + 1, false);
+   if (!choosePre && cur > 0 && nums[cur - 1] == nums[cur])
+   {
+       return;
+   }
+   subSet.push_back(nums[cur]);
+   helper90(nums, ans, subSet, cur + 1, true);
+   subSet.pop_back();
+}
+
+vector<vector<int>> MultiQuestions::question90(vector<int> &nums)
+{
+    vector<vector<int>> ans;
+    vector<int> subSet;
+    quickSort<vector<int>, int>(nums, 0, nums.size() - 1);
+    helper90(nums, ans, subSet, 0, false);
+    return ans;
+}
+
+void MultiQuestions::helper114(TreeNode *root, vector<TreeNode*>& l)
+{
+    if(root != nullptr)
+    {
+        l.push_back(root);
+        helper114(root->left, l);
+        helper114(root->right, l);
+    }
+}
+
+void MultiQuestions::question114(TreeNode* root)
+{
+    vector<TreeNode*> l;
+    helper114(root, l);
+    for(int i = 1; i < l.size(); ++i)
+    {
+        TreeNode *prev = l.at(i - 1);
+        TreeNode *cur = l.at(i);
+        prev->left = nullptr;
+        prev->right = cur;
+    }
+}
+
+void MultiQuestions::helper129(TreeNode* root, vector<stack<int>> &paths, stack<int> path)
+{
+    path.push(root->val);
+    if(root->left == nullptr && root->right == nullptr)
+    {
+        paths.push_back(path);
+        return;
+    }
+    if(root->left != nullptr)
+    {
+        helper129(root->left, paths, path);
+    }
+    if(root->right != nullptr)
+    {
+        helper129(root->right, paths, path);
+    }
+}
+
+int MultiQuestions::question129(TreeNode *root)
+{
+    vector<stack<int>> paths;
+    stack<int> path;
+    int ans = 0;
+    helper129(root, paths, path);
+
+    for(int i = 0; i < paths.size(); ++i)
+    {
+        stack<int> p = paths[i];
+        int pSum = 0;
+        int pSize = p.size();
+        for(int j = 0; j < pSize; ++j)
+        {
+            int times = 1;
+            for(int k = 0; k < j; ++k)
+            {
+                times *= 10;
+            }
+            int tmp = p.top();
+            p.pop();
+            pSum += tmp * times;
+        }
+        ans += pSum;
+    }
+    return ans;
+}
