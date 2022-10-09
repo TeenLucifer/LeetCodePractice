@@ -74,6 +74,30 @@ namespace BINARY_TREE
     };
 }
 
+namespace GRAPH
+{
+    class Node
+    {
+    public:
+        int val;
+        vector<Node*> neighbors;
+        Node()
+        {
+            neighbors = vector<Node*>();
+        }
+        Node(int _val)
+        {
+            val = _val;
+            neighbors = vector<Node*>();
+        }
+        Node(int _val, vector<Node*> _neighbors)
+        {
+            val = _val;
+            neighbors = _neighbors;
+        }
+    };
+}
+
 ListNode* createList(vector<int>& nums);
 
 #endif //DATASTRUCTURE_HEADERS_H

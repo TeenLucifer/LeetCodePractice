@@ -3528,3 +3528,123 @@ int MultiQuestions::question129(TreeNode *root)
     }
     return ans;
 }
+
+void MultiQuestions::helper47(vector<int> &nums, vector<vector<int>>& ans)
+{
+
+}
+
+vector<vector<int>> MultiQuestions::question47(vector<int> &nums)
+{
+    vector<vector<int>> ans;
+    helper47(nums, ans);
+
+    return ans;
+}
+
+void MultiQuestions::helper133_BFS(GRAPH::Node *node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited)
+{
+    queue<GRAPH::Node*> que;
+    if(node != nullptr)
+    {
+        visited[node] = new GRAPH::Node(node->val);
+        que.push(node);
+    }
+
+    while(!que.empty())
+    {
+        GRAPH::Node *node_ = que.front();
+        que.pop();
+
+        for(int i = 0; i < node_->neighbors.size(); ++i)
+        {
+            if(visited.find(node_->neighbors[i]) == visited.end())
+            {
+                visited[node_->neighbors[i]] = new GRAPH::Node(node_->neighbors[i]->val);
+                que.push(node_->neighbors[i]);
+            }
+            visited[node_]->neighbors.push_back(visited[node_->neighbors[i]]);
+        }
+    }
+}
+
+GRAPH::Node* MultiQuestions::question133_BFS(GRAPH::Node* node)
+{
+    unordered_map<GRAPH::Node*, GRAPH::Node*> visited;
+    helper133_BFS(node, visited);
+
+    return visited[node];
+}
+
+GRAPH::Node* MultiQuestions::helper133_DFS(GRAPH::Node *node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited)
+{
+    if(node == nullptr)
+    {
+        return node;
+    }
+
+    if(visited.find(node) != visited.end())
+    {
+        return visited[node];
+    }
+
+    GRAPH::Node *cloneNode = new GRAPH::Node(node->val);
+    visited[node] = cloneNode;
+
+    for(int i = 0; i < node->neighbors.size(); ++i)
+    {
+        cloneNode->neighbors.push_back(helper133_DFS(node->neighbors[i], visited));
+    }
+    return cloneNode;
+}
+
+GRAPH::Node* MultiQuestions::question133_DFS(GRAPH::Node* node)
+{
+    unordered_map<GRAPH::Node*, GRAPH::Node*> visited;
+    helper133_DFS(node, visited);
+
+    return visited[node];
+}
+
+void MultiQuestions::helper207_DFS(vector<int>& visited, vector<vector<int>> &edges, bool &valid, int u)
+{
+    visited[u] = 1;
+    for(int i = 0; i < edges[u].size(); ++i)
+    {
+        int v = edges[u][i];
+        if(visited[edges[u][i]] == 0)
+        {
+            helper207_DFS(visited, edges, valid, v);
+            if(valid == false)
+            {
+                return;
+            }
+        }
+        else if(visited[edges[u][i]] == 1)
+        {
+            valid = false;
+            return;
+        }
+    }
+    visited[u] = 2;
+}
+
+bool MultiQuestions::question207_DFS(int numCourses, vector<vector<int>> &prerequisites)//拓扑排序
+{
+    vector<int> visited(numCourses, 0);
+    vector<vector<int>> edges;
+    bool valid = true;
+    edges.resize(numCourses);
+    for(int i = 0; i < prerequisites.size(); ++i)
+    {
+        edges[prerequisites[i][1]].push_back(prerequisites[i][0]);
+    }
+    for(int i = 0; i < numCourses; ++i)
+    {
+        if(visited[i] == 0)
+        {
+            helper207_DFS(visited, edges, valid, i);
+        }
+    }
+    return valid;
+}

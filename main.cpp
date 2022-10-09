@@ -4,12 +4,8 @@
 int main()
 {
     MultiQuestions *multiQuestions = new MultiQuestions();
-    TreeNode* node0 = new TreeNode(1);
-    TreeNode* node1 = new TreeNode(2);
-    TreeNode* node2 = new TreeNode(3);
-    node0->left = node1;
-    node0->right = node2;
+    vector<vector<int>> prerequisites = {{1, 0}, {0, 1}};
 
-    multiQuestions->question129(node0);
+    multiQuestions->question207_BFS(2, prerequisites);
     return 0;
 }

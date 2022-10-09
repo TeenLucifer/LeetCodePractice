@@ -135,6 +135,10 @@ public:
     vector<vector<int>> question90(vector<int>& nums);
     void question114(TreeNode* root);
     int question129(TreeNode* root);
+    vector<vector<int>> question47(vector<int>& nums);
+    GRAPH::Node* question133_BFS(GRAPH::Node* node);
+    GRAPH::Node* question133_DFS(GRAPH::Node* node);
+    bool question207_DFS(int numCourses, vector<vector<int>> &prerequisites);
 
     template<typename T1, typename T2>
     void quickSort(T1& array, int low, int high);
@@ -176,6 +180,10 @@ private:
     void helper90(vector<int> &nums, vector<vector<int>> &ans, vector<int> subSet, int cur, bool choosePre);
     void helper114(TreeNode* root, vector<TreeNode*>& l);
     void helper129(TreeNode* root, vector<stack<int>> &paths, stack<int> path);
+    void helper47(vector<int>& nums, vector<vector<int>>& ans);
+    void helper133_BFS(GRAPH::Node* node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited);
+    GRAPH::Node* helper133_DFS(GRAPH::Node* node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited);
+    void helper207_DFS(vector<int>& visited, vector<vector<int>> &edges, bool &valid, int u);
     int getTreeHeight(TreeNode* node);
 };
 
