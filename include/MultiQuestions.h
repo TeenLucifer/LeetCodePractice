@@ -200,7 +200,6 @@ private:
     int helper222_DFS(TreeNode* root);
     TreeNode *helper226(TreeNode* root);
     void helper230(TreeNode* root, int &k, int &ans);
-    int getTreeHeight(TreeNode* node);
 };
 
 #endif //DATASTRUCTURE_MULTIQUESTIONS_H
