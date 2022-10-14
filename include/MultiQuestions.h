@@ -88,7 +88,7 @@ public:
     int question45(vector<int>& nums);
     vector<string> question22(int n);
     int question413(vector<int>& nums);
-    int question91(string s);
+    int question91(string s);//dp
     vector<vector<int>> question15(vector<int> nums);
     vector<vector<int>> question56(vector<vector<int>> intervals);
     vector<int> question119(int rowInex);
@@ -135,6 +135,17 @@ public:
     vector<vector<int>> question90(vector<int>& nums);
     void question114(TreeNode* root);
     int question129(TreeNode* root);
+    vector<vector<int>> question47(vector<int>& nums);
+    GRAPH::Node* question133_BFS(GRAPH::Node* node);
+    GRAPH::Node* question133_DFS(GRAPH::Node* node);
+    bool question207_DFS(int numCourses, vector<vector<int>> &prerequisites);
+    vector<string> question17(string digits);
+    bool question79(vector<vector<char>>& board, string word);
+    vector<int> question210(int numCourses, vector<vector<int>>& prerequisites);
+    int question222(TreeNode* root);
+    bool question139(string s, vector<string>& wordDict);
+    TreeNode* question226(TreeNode* root);//DFS
+    int question230(TreeNode* root, int k);
 
     template<typename T1, typename T2>
     void quickSort(T1& array, int low, int high);
@@ -142,6 +153,7 @@ public:
     TreeNode* buildBinarySearchTree(vector<int> &nums, int low, int high);
 
 private:
+    int getTreeHeight(TreeNode* node);
     void interval_quickSort(vector<vector<int>>& intervals, int low, int high);
 
     template<typename T1, typename T2>
@@ -176,7 +188,18 @@ private:
     void helper90(vector<int> &nums, vector<vector<int>> &ans, vector<int> subSet, int cur, bool choosePre);
     void helper114(TreeNode* root, vector<TreeNode*>& l);
     void helper129(TreeNode* root, vector<stack<int>> &paths, stack<int> path);
-    int getTreeHeight(TreeNode* node);
+    void helper47(vector<int>& nums, vector<vector<int>>& ans);
+    void helper133_BFS(GRAPH::Node* node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited);
+    GRAPH::Node* helper133_DFS(GRAPH::Node* node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited);
+    void helper207_DFS(vector<int>& visited, vector<vector<int>> &edges, bool &valid, int u);
+    void helper17(vector<string>& combinations, const unordered_map<char, string>& phoneMap, const string& digits, int index, string& combination);
+    void helper22(vector<string>& ans, string& cur, int open, int close, int n);
+    bool helper79(vector<vector<char>>& board, vector<vector<int>>& visited, int i, int j, string& s, int k);
+    void helper210(vector<int>& visited, vector<vector<int>>& edges, bool &valid, vector<int>& path, int u);
+    int helper222_BFS(TreeNode* root);
+    int helper222_DFS(TreeNode* root);
+    TreeNode *helper226(TreeNode* root);
+    void helper230(TreeNode* root, int &k, int &ans);
 };
 
 #endif //DATASTRUCTURE_MULTIQUESTIONS_H

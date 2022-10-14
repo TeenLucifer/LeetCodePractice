@@ -3,8 +3,6 @@
 //
 
 #include "MultiQuestions.h"
-#include <algorithm>
-#include <cmath>
 
 MultiQuestions::MultiQuestions()
 {}
@@ -1031,6 +1029,7 @@ vector<int> MultiQuestions::question350(vector<int> &nums1, vector<int> &nums2)
 
 int MultiQuestions::question121(vector<int> &prices)
 {
+#define INFINITY 99999;
     int maxProfit = 0;
     int minPrice = INFINITY;
     int n = prices.size();
@@ -1970,14 +1969,14 @@ int MultiQuestions::question45(vector<int> &nums)
 {
     int maxPos = 0;
     int n = nums.size();
-    int end = 0;
+    int end = 0;//记录下一步跳跃能到达的最远距离
     int step = 0;
     for(int i = 0; i < n - 1; ++i)
     {
         if(maxPos >= i)
         {
-            maxPos = max(maxPos, i + nums[i]);
-            if(i == end)
+            maxPos = max(maxPos, i + nums[i]);//这里的for循环相当于是在遍历nums数组，计算从当前位置开始能到达的最远距离
+            if(i == end)//如果已经到达最远距离，就进行下一次跳跃
             {
                 end = maxPos;
                 ++step;
@@ -1987,10 +1986,33 @@ int MultiQuestions::question45(vector<int> &nums)
     return step;
 }
 
+void MultiQuestions::helper22(vector<std::string> &ans, string& cur, int open, int close, int n)
+{
+    if(cur.size() == n * 2)
+    {
+        ans.push_back(cur);
+        return;
+    }
+    if(open < n)
+    {
+        cur.push_back('(');
+        helper22(ans, cur, open + 1, close, n);
+        cur.pop_back();
+    }
+    if(close < open)
+    {
+        cur.push_back(')');
+        helper22(ans, cur, open, close + 1, n);
+        cur.pop_back();
+    }
+}
+
 vector<string> MultiQuestions::question22(int n)
 {
-    vector<string> a;
-    return a;
+    vector<string> ans;
+    string current;
+    helper22(ans, current, 0, 0, n);
+    return ans;
 }
 
 int MultiQuestions::question413(vector<int> &nums)
@@ -3526,5 +3548,392 @@ int MultiQuestions::question129(TreeNode *root)
         }
         ans += pSum;
     }
+    return ans;
+}
+
+void MultiQuestions::helper47(vector<int> &nums, vector<vector<int>>& ans)
+{
+
+}
+
+vector<vector<int>> MultiQuestions::question47(vector<int> &nums)
+{
+    vector<vector<int>> ans;
+    helper47(nums, ans);
+
+    return ans;
+}
+
+void MultiQuestions::helper133_BFS(GRAPH::Node *node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited)
+{
+    queue<GRAPH::Node*> que;
+    if(node != nullptr)
+    {
+        visited[node] = new GRAPH::Node(node->val);
+        que.push(node);
+    }
+
+    while(!que.empty())
+    {
+        GRAPH::Node *node_ = que.front();
+        que.pop();
+
+        for(int i = 0; i < node_->neighbors.size(); ++i)
+        {
+            if(visited.find(node_->neighbors[i]) == visited.end())
+            {
+                visited[node_->neighbors[i]] = new GRAPH::Node(node_->neighbors[i]->val);
+                que.push(node_->neighbors[i]);
+            }
+            visited[node_]->neighbors.push_back(visited[node_->neighbors[i]]);
+        }
+    }
+}
+
+GRAPH::Node* MultiQuestions::question133_BFS(GRAPH::Node* node)
+{
+    unordered_map<GRAPH::Node*, GRAPH::Node*> visited;
+    helper133_BFS(node, visited);
+
+    return visited[node];
+}
+
+GRAPH::Node* MultiQuestions::helper133_DFS(GRAPH::Node *node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited)
+{
+    if(node == nullptr)
+    {
+        return node;
+    }
+
+    if(visited.find(node) != visited.end())
+    {
+        return visited[node];
+    }
+
+    GRAPH::Node *cloneNode = new GRAPH::Node(node->val);
+    visited[node] = cloneNode;
+
+    for(int i = 0; i < node->neighbors.size(); ++i)
+    {
+        cloneNode->neighbors.push_back(helper133_DFS(node->neighbors[i], visited));
+    }
+    return cloneNode;
+}
+
+GRAPH::Node* MultiQuestions::question133_DFS(GRAPH::Node* node)
+{
+    unordered_map<GRAPH::Node*, GRAPH::Node*> visited;
+    helper133_DFS(node, visited);
+
+    return visited[node];
+}
+
+void MultiQuestions::helper207_DFS(vector<int>& visited, vector<vector<int>> &edges, bool &valid, int u)
+{
+    visited[u] = 1;
+    for(int i = 0; i < edges[u].size(); ++i)
+    {
+        int v = edges[u][i];
+        if(visited[edges[u][i]] == 0)
+        {
+            helper207_DFS(visited, edges, valid, v);
+            if(valid == false)
+            {
+                return;
+            }
+        }
+        else if(visited[edges[u][i]] == 1)
+        {
+            valid = false;
+            return;
+        }
+    }
+    visited[u] = 2;
+}
+
+bool MultiQuestions::question207_DFS(int numCourses, vector<vector<int>> &prerequisites)//拓扑排序
+{
+    vector<int> visited(numCourses, 0);
+    vector<vector<int>> edges;
+    bool valid = true;
+    edges.resize(numCourses);
+    for(int i = 0; i < prerequisites.size(); ++i)
+    {
+        edges[prerequisites[i][1]].push_back(prerequisites[i][0]);
+    }
+    for(int i = 0; i < numCourses; ++i)
+    {
+        if(visited[i] == 0)
+        {
+            helper207_DFS(visited, edges, valid, i);
+        }
+    }
+    return valid;
+}
+
+void MultiQuestions::helper17(vector<string>& combinations, const unordered_map<char, string>& phoneMap, const string& digits, int index, string& combination)
+{
+    if(index == digits.length())
+    {
+        combinations.push_back(combination);
+    }
+    else
+    {
+        char digit = digits[index];
+        const string &letters = phoneMap.at(digit);
+        for(const char& letter: letters)
+        {
+            combination.push_back(letter);
+            helper17(combinations, phoneMap, digits, index + 1, combination);
+            combination.pop_back();
+        }
+    }
+}
+
+vector<string> MultiQuestions::question17(std::string digits)
+{
+    vector<string> combinations;
+    if(digits.empty())
+    {
+        return combinations;
+    }
+    unordered_map<char, string> phoneMap
+    {
+            {'2', "abc"},
+            {'3', "def"},
+            {'4', "ghi"},
+            {'5', "jkl"},
+            {'6', "mno"},
+            {'7', "pqrs"},
+            {'8', "tuv"},
+            {'9', "wxyz"},
+    };
+    string combination;
+    helper17(combinations, phoneMap, digits, 0, combination);
+    return combinations;
+}
+
+bool MultiQuestions::helper79(vector<vector<char>>& board, vector<vector<int>>& visited, int i, int j, string& s, int k)
+{
+    if (board[i][j] != s[k])
+    {
+        return false;
+    }
+    else if (k == s.length() - 1)
+    {
+        return true;
+    }
+    visited[i][j] = true;
+    vector<pair<int, int>> directions{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    bool result = false;
+    for (const auto& dir: directions)
+    {
+        int newi = i + dir.first, newj = j + dir.second;
+        if (newi >= 0 && newi < board.size() && newj >= 0 && newj < board[0].size())
+        {
+            if (!visited[newi][newj])
+            {
+                bool flag = helper79(board, visited, newi, newj, s, k + 1);
+                if (flag)
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+    }
+    visited[i][j] = false;
+    return result;
+}
+
+bool MultiQuestions::question79(vector<vector<char>> &board, std::string word)
+{
+    int h = board.size(), w = board[0].size();
+    vector<vector<int>> visited(h, vector<int>(w));
+    for (int i = 0; i < h; i++)
+    {
+        for (int j = 0; j < w; j++)
+        {
+            bool flag = helper79(board, visited, i, j, word, 0);
+            if (flag)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void MultiQuestions::helper210(vector<int> &visited, vector<vector<int>> &edges, bool &valid, vector<int>& path, int u)
+{
+    visited[u] = 1;
+    for(int i = 0; i < edges[u].size(); ++i)
+    {
+        int v = edges[u][i];
+        if(visited[edges[u][i]] == 0)
+        {
+            helper210(visited, edges, valid, path, v);
+            if(valid == false)
+            {
+                return;
+            }
+        }
+        else if(visited[edges[u][i]] == 1)
+        {
+            valid = false;
+            return;
+        }
+    }
+    visited[u] = 2;
+    path.push_back(u);
+}
+
+vector<int> MultiQuestions::question210(int numCourses, vector<vector<int>> &prerequisites)
+{
+    vector<int> ans;
+    vector<int> visited(numCourses, 0);
+    vector<vector<int>> edges;
+    bool valid = true;
+
+    edges.resize(numCourses);
+    for(int i = 0; i < prerequisites.size(); ++i)
+    {
+        edges[prerequisites[i][1]].push_back(prerequisites[i][0]);
+    }
+    for(int i = 0; i < numCourses; ++i)
+    {
+        if(visited[i] == 0)
+        {
+            helper210(visited, edges, valid, ans, i);
+        }
+    }
+    if(valid == false)
+    {
+        return vector<int>{};
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+int MultiQuestions::helper222_BFS(TreeNode* root)
+{
+    if(root == nullptr)
+    {
+        return 0;
+    }
+
+    int nodeNum = 0;
+    queue<TreeNode*> que;
+    que.push(root);
+
+    while(!que.empty())
+    {
+        TreeNode* node = que.front();
+        que.pop();
+
+        nodeNum++;
+
+        if(node->left != nullptr)
+        {
+            que.push(node->left);
+        }
+        if(node->right != nullptr)
+        {
+            que.push(node->right);
+        }
+    }
+
+    return nodeNum;
+}
+
+int MultiQuestions::helper222_DFS(TreeNode *root)
+{
+    if(root == nullptr)
+    {
+        return 0;
+    }
+
+    return (1 + helper222_DFS(root->left) + helper222_DFS(root->right));
+}
+
+int MultiQuestions::question222(TreeNode *root)
+{
+    if(root == nullptr)
+    {
+        return 0;
+    }
+    return helper222_BFS(root);
+}
+
+bool MultiQuestions::question139(string s, vector<std::string> &wordDict)
+{
+    unordered_set<string> wordDictSet = unordered_set<string>();
+    for(string word : wordDict)
+    {
+        wordDictSet.insert(word);
+    }
+    vector<bool> dp = vector<bool>(s.size() + 1);
+    dp[0] = true;
+    for(int i = 1; i <= s.size(); ++i)
+    {
+        for(int j = 0; j < i; ++j)
+        {
+            if(dp[j] && wordDictSet.find(s.substr(j, i - j)) != wordDictSet.end())
+            {
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+    return dp[s.size()];
+}
+
+TreeNode* MultiQuestions::helper226(TreeNode* root)
+{
+    if(root == nullptr)
+    {
+        return nullptr;
+    }
+    TreeNode *node = new TreeNode(root->val);
+    node->right = helper226(root->left);
+    node->left = helper226(root->right);
+
+    return node;
+}
+
+TreeNode* MultiQuestions::question226(TreeNode* root)//DFS
+{
+    if(root == nullptr)
+    {
+        return nullptr;
+    }
+    TreeNode *ans = new TreeNode(root->val);
+    ans->left = helper226(root->right);
+    ans->right = helper226(root->left);
+
+    return ans;
+}
+
+void MultiQuestions::helper230(TreeNode *root, int &k, int &ans)
+{
+    if(root == nullptr || k == 0)
+    {
+        return;
+    }
+    helper230(root->left, k, ans);
+    k--;
+    if(k == 0)
+    {
+        ans = root->val;
+        return;
+    }
+    helper230(root->right, k, ans);
+}
+
+int MultiQuestions::question230(TreeNode *root, int k)
+{
+    int ans = -1;
+    helper230(root, k, ans);
+
     return ans;
 }

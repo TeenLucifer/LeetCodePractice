@@ -2,3 +2,5 @@
 # 以下是忽略的文件和文件夹
 .idea/
 cmake-build-debug/
+build/
+bin/

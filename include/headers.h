@@ -12,6 +12,9 @@
 #include <string>
 #include <queue>
 #include <stack>
+#include <limits.h>
+#include <string.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -71,6 +74,30 @@ namespace BINARY_TREE
         Node() : val(0), left(nullptr), right(nullptr), next(nullptr){}
         Node(int _val) : val(_val), left(nullptr), right(nullptr), next(nullptr){}
         Node(int _val, Node* _left, Node* _right, Node* _next) : val(_val), left(_left), right(_right), next(_next){}
+    };
+}
+
+namespace GRAPH
+{
+    class Node
+    {
+    public:
+        int val;
+        vector<Node*> neighbors;
+        Node()
+        {
+            neighbors = vector<Node*>();
+        }
+        Node(int _val)
+        {
+            val = _val;
+            neighbors = vector<Node*>();
+        }
+        Node(int _val, vector<Node*> _neighbors)
+        {
+            val = _val;
+            neighbors = _neighbors;
+        }
     };
 }
 
