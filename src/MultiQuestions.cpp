@@ -4403,3 +4403,181 @@ vector<string> MultiQuestions::question93(std::string s)
 
     return ans;
 }
+
+void MultiQuestions::helper257(TreeNode *node, vector<std::string> &ans, std::string path)
+{
+    path += std::to_string(node->val);
+    if(node->left != nullptr || node->right != nullptr)
+    {
+        path.push_back('-');
+        path.push_back('>');
+    }
+    if(node->left == nullptr && node->right == nullptr)
+    {
+        ans.push_back(path);
+        return;
+    }
+
+    if(node->left != nullptr)
+    {
+        helper257(node->left, ans, path);
+    }
+    if(node->right != nullptr)
+    {
+        helper257(node->right, ans, path);
+    }
+}
+
+vector<string> MultiQuestions::question257(TreeNode *root)
+{
+    vector<string> ans;
+    string path;
+    helper257(root, ans, path);
+
+    return ans;
+}
+
+void MultiQuestions::helper51(vector<vector<std::string>> &ans, vector<std::string> solution,
+                              vector<pair<int, int>> &dir, int cnt)
+{
+    int n = solution[0].size();
+    if(cnt == n)
+    {
+        ans.push_back(solution);
+        return;
+    }
+
+    for(int i = 0; i < n; ++i)
+    {
+        int cnt_ = cnt;
+        bool flag = false;
+        int x = i;
+        int y = cnt;
+        for(int j = 0; j < 8; ++j)
+        {
+            int new_x = x + dir[j].first;
+            int new_y = y + dir[j].second;
+            while(new_x >= 0 && new_x < n && new_y >= 0 && new_y < n)
+            {
+                if(solution[new_y][new_x] == 'Q')
+                {
+                    flag = true;
+                    break;
+                }
+                new_x += dir[j].first;
+                new_y += dir[j].second;
+            }
+            if(flag == true)
+            {
+                break;
+            }
+        }
+        if(flag == true)
+        {
+            continue;
+        }
+        solution[y][x] = 'Q';
+        cnt_++;
+        helper51(ans, solution, dir, cnt_);
+        solution[y][x] = '.';
+    }
+}
+
+vector<vector<string>> MultiQuestions::question51(int n)
+{
+    if(n == 1)
+    {
+        return vector<vector<string>>({{"Q"}});
+    }
+    if(n == 2 || n == 3)
+    {
+        return vector<vector<string>>();
+    }
+    vector<vector<string>> ans;
+    vector<string> solution(n, string(n, '.'));
+    vector<pair<int, int>> dir;
+    dir.push_back({0, 1});
+    dir.push_back({0, -1});
+    dir.push_back({1, 0});
+    dir.push_back({1, 1});
+    dir.push_back({1, -1});
+    dir.push_back({-1, 0});
+    dir.push_back({-1, 1});
+    dir.push_back({-1, -1});
+
+    helper51(ans, solution, dir, 0);
+
+    return ans;
+}
+
+void MultiQuestions::helper52(int &ans, vector<std::string> solution, vector<pair<int, int>> &dir, int cnt)
+{
+    int n = solution[0].size();
+    if(cnt == n)
+    {
+        ans++;
+        return;
+    }
+
+    for(int i = 0; i < n; ++i)
+    {
+        int cnt_ = cnt;
+        bool flag = false;
+        int x = i;
+        int y = cnt;
+        for(int j = 0; j < 8; ++j)
+        {
+            int new_x = x + dir[j].first;
+            int new_y = y + dir[j].second;
+            while(new_x >= 0 && new_x < n && new_y >= 0 && new_y < n)
+            {
+                if(solution[new_y][new_x] == 'Q')
+                {
+                    flag = true;
+                    break;
+                }
+                new_x += dir[j].first;
+                new_y += dir[j].second;
+            }
+            if(flag == true)
+            {
+                break;
+            }
+        }
+        if(flag == true)
+        {
+            continue;
+        }
+        solution[y][x] = 'Q';
+        cnt_++;
+        helper52(ans, solution, dir, cnt_);
+        solution[y][x] = '.';
+    }
+}
+
+int MultiQuestions::question52(int n)
+{
+    if(n == 1)
+    {
+        return 1;
+    }
+    if(n == 2 || n == 3)
+    {
+        return 0;
+    }
+    int ans = 0;
+    vector<string> solution(n, string(n, '.'));
+    vector<pair<int, int>> dir;
+    dir.push_back({0, 1});
+    dir.push_back({0, -1});
+    dir.push_back({1, 0});
+    dir.push_back({1, 1});
+    dir.push_back({1, -1});
+    dir.push_back({-1, 0});
+    dir.push_back({-1, 1});
+    dir.push_back({-1, -1});
+
+    helper52(ans, solution, dir, 0);
+
+    return ans;
+}

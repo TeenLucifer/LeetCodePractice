@@ -4,8 +4,7 @@ int main()
 {
     MultiQuestions* multiQuestions = new MultiQuestions();
 
-    string s = "25525511135";
-    multiQuestions->question93(s);
+    multiQuestions->question51(4);
 
     return 0;
 }
