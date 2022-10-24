@@ -3551,15 +3551,35 @@ int MultiQuestions::question129(TreeNode *root)
     return ans;
 }
 
-void MultiQuestions::helper47(vector<int> &nums, vector<vector<int>>& ans)
+void MultiQuestions::helper47(vector<int> nums, vector<int> &visited,  vector<int> path, int idx, vector<vector<int>>& ans)
 {
-
+    if(idx == nums.size())
+    {
+        ans.push_back(path);
+        return;
+    }
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        if(visited[i] || (i > 0 && nums[i] == nums[i - 1] && !visited[i - 1]))
+        {
+            continue;
+        }
+        path.push_back(nums[i]);
+        visited[i] = 1;
+        helper47(nums, visited, path, idx + 1, ans);
+        visited[i] = 0;
+        path.pop_back();
+    }
 }
 
 vector<vector<int>> MultiQuestions::question47(vector<int> &nums)
 {
     vector<vector<int>> ans;
-    helper47(nums, ans);
+    vector<int> path;
+    vector<int> visited;
+    visited.resize(nums.size());
+    quickSort<vector<int>, int>(nums, 0, nums.size() - 1);
+    helper47(nums, visited, path, 0, ans);
 
     return ans;
 }
@@ -3934,6 +3954,452 @@ int MultiQuestions::question230(TreeNode *root, int k)
 {
     int ans = -1;
     helper230(root, k, ans);
+
+    return ans;
+}
+
+int MultiQuestions::question300(vector<int> &nums)
+{
+    int n = nums.size();
+    if(n == 0)
+    {
+        return 0;
+    }
+    vector<int> dp(n, 0);
+    dp[0] = 1;
+
+    for(int i = 1; i < n; ++i)
+    {
+        dp[i] = 1;
+        for(int j = 0; j < i; ++j)
+        {
+            if(nums[j] < nums[i])
+            {
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+    }
+    return *max_element(dp.begin(), dp.end());
+}
+
+int MultiQuestions::question673(vector<int> &nums)
+{
+    int n = nums.size();
+    int maxLen = 0;
+    int ans = 0;
+    if(n == 0)
+    {
+        return 0;
+    }
+    vector<int> dp(n, 0);
+    vector<int> cnt(n);
+    dp[0] = 1;
+
+    for(int i = 1; i < n; ++i)
+    {
+        dp[i] = 1;
+        for(int j = 0; j < i; ++j)
+        {
+            if(nums[j] < nums[i])
+            {
+                if(dp[j] + 1 > dp[i])
+                {
+                    dp[i] = dp[j] + 1;
+                    cnt[i] = cnt[j];
+                }
+                else if(dp[j] + 1 == dp[i])
+                {
+                    cnt[i] += cnt[j];
+                }
+            }
+        }
+        if(dp[i] > maxLen)
+        {
+            maxLen = dp[i];
+            ans = cnt[i];
+        }
+        else if(dp[i] == maxLen)
+        {
+            ans += cnt[i];
+        }
+    }
+    return ans;
+}
+
+vector<int> MultiQuestions::question310(int n, vector<vector<int>> &edges)
+{
+    if(n == 1)
+    {
+        return {0};
+    }
+    vector<vector<int>> adj(n);
+    vector<int> degree(n);
+    queue<int> que;
+    vector<int> ans;
+    int remainingNodes = n;
+    for(int i = 0; i < edges.size(); ++i)
+    {
+        vector<int> edge = edges[i];
+        adj[edge[0]].push_back(edge[1]);
+        adj[edge[1]].push_back(edge[0]);
+        degree[edge[0]]++;
+        degree[edge[1]]++;
+    }
+    for(int i = 0; i < n; ++i)
+    {
+        if(degree[i] == 1)
+        {
+            que.push(i);
+        }
+    }
+    while(remainingNodes > 2)
+    {
+        int sz = que.size();
+        remainingNodes -= sz;
+        for(int i = 0; i < sz; ++i)
+        {
+            int curr = que.front();
+            que.pop();
+            for(int v : adj[curr])
+            {
+                degree[v]--;
+                if(degree[v] == 1)
+                {
+                    que.push(v);
+                }
+            }
+        }
+    }
+    while(!que.empty())
+    {
+        ans.push_back(que.front());
+        que.pop();
+    }
+
+    return ans;
+}
+
+int MultiQuestions::question329(vector<vector<int>> &matrix)
+{
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int ans = 0;
+    vector<vector<int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    vector<vector<int>> outDegree(m, vector<int>(n));
+    queue<pair<int, int>> que;
+
+    for(int i = 0; i < m; ++i)
+    {
+        for(int j = 0; j < n; ++j)
+        {
+            int curVal = matrix[i][j];
+            int degree = 0;
+            for(int k = 0; k < 4; ++k)
+            {
+                int x = i + dirs[k][0];
+                int y = j + dirs[k][1];
+                if(x >= 0 && x < m && y >= 0 && y < n && matrix[x][y] > curVal)
+                {
+                    ++degree;
+                }
+            }
+            outDegree[i][j] = degree;
+            if(degree == 0)
+            {
+                que.push({i, j});
+            }
+        }
+    }
+
+    while(!que.empty())
+    {
+        ans++;
+        int size = que.size();
+
+        for(int i = 0; i < size; ++i)
+        {
+            pair<int, int> curNode = que.front();
+            int x = curNode.first;
+            int y = curNode.second;
+            que.pop();
+            for(int j = 0; j < 4; ++j)
+            {
+                int newX = x + dirs[j][0];
+                int newY = y + dirs[j][1];
+                if(newX >= 0 && newX < m && newY >= 0 && newY < n && matrix[x][y] > matrix[newX][newY])
+                {
+                    --outDegree[newX][newY];
+                    if(outDegree[newX][newY] == 0)
+                    {
+                        que.push({newX, newY});
+                    }
+                }
+            }
+        }
+    }
+
+    return ans;
+}
+
+int MultiQuestions::question1143(std::string text1, std::string text2)
+{
+    int m = text1.size();
+    int n = text2.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for(int i = 1; i <= m; ++i)
+    {
+        for(int j = 1; j <= n; ++j)
+        {
+            if(text1[i - 1] == text2[j - 1])
+            {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            }
+            else
+            {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[m][n];
+}
+
+int MultiQuestions::question583(std::string word1, std::string word2)
+{
+    int len1 = word1.length();
+    int len2 = word2.length();
+    int dp[len1 + 1][len2 + 1];
+    for(int i = 0; i <= len1; ++i)
+    {
+        dp[i][0] = i;
+    }
+    for(int i = 0; i <= len2; ++i)
+    {
+        dp[0][i] = i;
+    }
+    for(int i = 1; i <= len1; ++i)
+    {
+        for(int j = 1; j <= len2; ++j)
+        {
+            if(word1[i - 1] == word2[j - 1])
+            {
+                dp[i][j] = dp[i - 1][j - 1];
+            }
+            else
+            {
+                dp[i][j] = min(dp[i][j - 1] + 1, min(dp[i - 1][j - 1] + 2, dp[i - 1][j] + 1));
+            }
+        }
+    }
+    return dp[len1][len2];
+}
+
+int MultiQuestions::question72(std::string word1, std::string word2)
+{
+    int n = word1.length();
+    int m = word2.length();
+
+    if(n * m == 0)
+    {
+        return n + m;
+    }
+
+    vector<vector<int>> D(n + 1, vector<int>(m + 1));
+    for(int i = 0; i < n + 1; ++i)
+    {
+        D[i][0] = i;
+    }
+    for(int j = 0; j < m + 1; ++j)
+    {
+        D[0][j] = j;
+    }
+    for(int i = 1; i < n + 1; ++i)
+    {
+        for(int j = 1; j < m + 1; ++j)
+        {
+            int left = D[i - 1][j] + 1;
+            int down = D[i][j - 1] + 1;
+            int left_down = D[i - 1][j - 1];
+            if(word1.at(i - 1) != word2.at(j - 1))
+            {
+                left_down += 1;
+            }
+            D[i][j] = min(left, min(down, left_down));
+        }
+    }
+    return D[n][m];
+}
+
+int MultiQuestions::helper322(vector<int> &coins, int rem, vector<int>& count)
+{
+    if(rem < 0)
+    {
+        return -1;
+    }
+    if(rem == 0)
+    {
+        return 0;
+    }
+    if(count[rem - 1] != 0)
+    {
+        return count[rem - 1];
+    }
+    int min = INT_MAX;
+    for(int coin : coins)
+    {
+        int res = helper322(coins, rem - coin, count);
+        if(res >= 0 && res < min)
+        {
+            min = res + 1;
+        }
+    }
+    count[rem - 1] = (min == INT_MAX ? -1 : min);
+    return count[rem - 1];
+}
+
+int MultiQuestions::question322(vector<int> &coins, int amount)
+{
+    vector<int> count;
+    if(amount < 1)
+    {
+        return 0;
+    }
+    count.resize(amount);
+    return helper322(coins, amount, count);
+}
+
+void MultiQuestions::helper46(vector<int> nums, vector<int> path, vector<vector<int>> &ans)
+{
+    int size = nums.size();
+    if(size == 0)
+    {
+        ans.push_back(path);
+        return;
+    }
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        path.push_back(nums[i]);
+        vector<int> newNum;
+        for(int j = 0; j < nums.size(); ++j)
+        {
+            if(nums[j] != nums[i])
+            {
+                newNum.push_back(nums[j]);
+            }
+        }
+
+        helper46(newNum, path, ans);
+        path.pop_back();
+    }
+}
+
+vector<vector<int>> MultiQuestions::question46(vector<int> &nums)
+{
+    vector<vector<int>> ans;
+    vector<int> path;
+    helper46(nums, path, ans);
+    return ans;
+}
+
+int MultiQuestions::question201(int left, int right)
+{
+    int shift = 0;
+    while(left < right)
+    {
+        left >>= 1;
+        right >>= 1;
+        ++shift;
+    }
+    return left << shift;
+}
+
+void MultiQuestions::helper77(vector<int> nums, vector<bool> visited, vector<vector<int>> &ans, vector<int> perm,
+                              int k){
+    if(k == 0)
+    {
+        ans.push_back(perm);
+        return;
+    }
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        int k_t = k;
+        if(visited[i] == false)
+        {
+            visited[i] = true;
+            perm.push_back(nums[i]);
+            helper77(nums, visited, ans, perm, --k_t);
+            perm.pop_back();
+        }
+    }
+}
+
+vector<vector<int>> MultiQuestions::question77(int n, int k)
+{
+    vector<vector<int>> ans;
+    vector<int> perm;
+    vector<int> nums;
+    vector<bool> visited(n, false);
+    if( k > n)
+    {
+        return ans;
+    }
+    for(int i = 1; i < n + 1; ++i)
+    {
+        nums.push_back(i);
+    }
+    helper77(nums, visited, ans, perm, k);
+    return ans;
+}
+
+void MultiQuestions::helper93(string &s, vector<std::string> &ans, vector<int> &segments, int segId, int segStart)
+{
+    if(segId == 4)
+    {
+        if(segStart == s.size())
+        {
+            string ipAddr;
+            for(int i = 0; i < 4; ++i)
+            {
+                ipAddr += to_string(segments[i]);
+                if(i != segments.size() - 1)
+                {
+                    ipAddr += '.';
+                }
+            }
+            ans.push_back(ipAddr);
+        }
+        return;
+    }
+    if(segStart == s.size())
+    {
+        return;
+    }
+    if(s[segStart] == '0')
+    {
+        segments[segId] = 0;
+        helper93(s, ans, segments, segId + 1, segStart + 1);
+    }
+    int addr = 0;
+    for(int segEnd = segStart; segEnd < s.size(); ++segEnd)
+    {
+        addr = addr * 10 + (s[segEnd] - '0');
+        if(addr > 0 && addr <= 0xFF)
+        {
+            segments[segId] = addr;
+            helper93(s, ans, segments, segId + 1, segEnd + 1);
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
+vector<string> MultiQuestions::question93(std::string s)
+{
+    vector<string> ans;
+    vector<int> segments;
+    segments.resize(4);
+    helper93(s, ans, segments, 0, 0);
 
     return ans;
 }

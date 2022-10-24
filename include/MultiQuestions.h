@@ -146,6 +146,18 @@ public:
     bool question139(string s, vector<string>& wordDict);
     TreeNode* question226(TreeNode* root);//DFS
     int question230(TreeNode* root, int k);
+    int question300(vector<int>& nums);
+    int question673(vector<int>& nums);
+    vector<int> question310(int n, vector<vector<int>>& edges);
+    int question329(vector<vector<int>>& matrix);
+    int question1143(string text1, string text2);
+    int question583(string word1, string word2);
+    int question72(string word1, string word2);
+    int question322(vector<int>& coins, int amount);
+    vector<vector<int>> question46(vector<int>& nums);
+    int question201(int left, int right);
+    vector<vector<int>> question77(int n, int k);
+    vector<string> question93(string);
 
     template<typename T1, typename T2>
     void quickSort(T1& array, int low, int high);
@@ -188,7 +200,7 @@ private:
     void helper90(vector<int> &nums, vector<vector<int>> &ans, vector<int> subSet, int cur, bool choosePre);
     void helper114(TreeNode* root, vector<TreeNode*>& l);
     void helper129(TreeNode* root, vector<stack<int>> &paths, stack<int> path);
-    void helper47(vector<int>& nums, vector<vector<int>>& ans);
+    void helper47(vector<int> nums, vector<int>& visited, vector<int> path, int idx, vector<vector<int>>& ans);
     void helper133_BFS(GRAPH::Node* node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited);
     GRAPH::Node* helper133_DFS(GRAPH::Node* node, unordered_map<GRAPH::Node*, GRAPH::Node*> &visited);
     void helper207_DFS(vector<int>& visited, vector<vector<int>> &edges, bool &valid, int u);
@@ -200,6 +212,10 @@ private:
     int helper222_DFS(TreeNode* root);
     TreeNode *helper226(TreeNode* root);
     void helper230(TreeNode* root, int &k, int &ans);
+    int helper322(vector<int>& coins, int rem, vector<int>& count);
+    void helper46(vector<int> nums, vector<int> path, vector<vector<int>>& ans);
+    void helper77(vector<int> nums, vector<bool> visited, vector<vector<int>>& ans, vector<int> perm, int k);
+    void helper93(string &s, vector<string>& ans, vector<int>& segments, int segId, int segStart);
 };
 
 #endif //DATASTRUCTURE_MULTIQUESTIONS_H
