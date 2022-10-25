@@ -161,6 +161,8 @@ public:
     vector<string> question257(TreeNode* root);
     vector<vector<string>> question51(int n);
     int question52(int n);
+    void question37(vector<vector<char>>& board);
+    vector<vector<int>> question216(int k, int n);
 
     template<typename T1, typename T2>
     void quickSort(T1& array, int low, int high);
@@ -222,6 +224,8 @@ private:
     void helper257(TreeNode* node, vector<string>& ans, string path);
     void helper51(vector<vector<string>>& ans, vector<string> solution, vector<pair<int, int>>& dir, int cnt);
     void helper52(int &ans, vector<string> solution, vector<pair<int, int>>& dir, int cnt);
+    void helper37(vector<vector<bool>>& line, vector<vector<bool>>& column, vector<vector<vector<bool>>>& block, vector<pair<int, int>>& spaces, bool& valid, vector<vector<char>>& board, int pos);
+    void helper216(vector<vector<int>>& ans, int& cur, int& k, int& n, vector<int>& perm);
 };
 
 #endif //DATASTRUCTURE_MULTIQUESTIONS_H

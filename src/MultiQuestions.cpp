@@ -4581,3 +4581,86 @@ int MultiQuestions::question52(int n)
 
     return ans;
 }
+
+void MultiQuestions::helper37(vector<vector<bool>>& line, vector<vector<bool>>& column, vector<vector<vector<bool>>>& block, vector<pair<int, int>>& spaces, bool& valid, vector<vector<char>>& board, int pos)
+{
+    if(pos == spaces.size())
+    {
+        valid = true;
+        return;
+    }
+    auto [i, j] = spaces[pos];
+    for(int digit = 0; digit < 9 && !valid; ++digit)
+    {
+        if(!line[i][digit] && !column[j][digit] && !block[i / 3][j / 3][digit])
+        {
+            line[i][digit] = column[j][digit] = block[i / 3][j / 3][digit] = true;
+            board[i][j] = digit + '0' + 1;
+            helper37(line, column, block, spaces, valid, board, pos + 1);
+            line[i][digit] = column[j][digit] = block[i / 3][j / 3][digit] = false;
+        }
+    }
+}
+
+void MultiQuestions::question37(vector<vector<char>> &board)
+{
+    vector<vector<bool>> line(9, vector<bool>(9, false));
+    vector<vector<bool>> column(9, vector<bool>(9, false));
+    vector<vector<vector<bool>>> block(3, vector<vector<bool>>(3, vector<bool>(9, false)));
+    vector<pair<int, int>> spaces;
+    bool valid;
+
+    for(int i = 0; i < 9; ++i)
+    {
+        for(int j = 0; j <9; ++j)
+        {
+            if(board[i][j] == '.')
+            {
+                spaces.push_back({i, j});
+            }
+            else
+            {
+                int digit = board[i][j] - '0' - 1;
+                line[i][digit] = column[j][digit] = block[i / 3][j / 3][digit] = true;
+            }
+        }
+    }
+
+    helper37(line, column, block, spaces, valid, board, 0);
+}
+
+void MultiQuestions::helper216(vector<vector<int>>& ans, int& cur, int& k, int& n, vector<int>& perm)
+{
+    if(cur > 9 || n < 0 || (perm.size() >= k && n != 0))
+    {
+        return;
+    }
+    if(n == 0 && perm.size() == k)
+    {
+        ans.push_back(perm);
+        return;
+    }
+
+    n = n - (cur + 1);
+    perm.push_back(cur + 1);
+    cur = cur + 1;
+    helper216(ans, cur, k, n, perm);
+    cur = cur - 1;
+    perm.pop_back();
+    n = n + (cur + 1);
+
+    cur = cur + 1;
+    helper216(ans, cur, k, n, perm);
+    cur = cur - 1;
+}
+
+vector<vector<int>> MultiQuestions::question216(int k, int n)
+{
+    int cur = 0;
+    vector<vector<int>> ans;
+    vector<int> perm;
+
+    helper216(ans, cur, k, n, perm);
+
+    return ans;
+}
