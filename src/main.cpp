@@ -3,8 +3,8 @@
 int main()
 {
     MultiQuestions* multiQuestions = new MultiQuestions();
-
-    multiQuestions->question216(9, 45);
+    vector<vector<int>> gridObstacle = {{1, 0}};
+    int res = multiQuestions->question63(gridObstacle);
 
     return 0;
 }

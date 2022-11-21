@@ -38,11 +38,8 @@ public:
     bool question217(vector<int>& nums);
     int question53(vector<int>& nums);
     vector<int> question1(vector<int>& nums, int target);
-    int question509(int n);
-    int question70(int n);
-    int question746(vector<int>& cost);
-    int question62(int m, int n);
-    int question63(vector<vector<int>>& obstacleGrid);
+
+
     int question343(int n);
     void question88(vector<int>& nums1, int m, vector<int>& nums2, int n);
     vector<int> question350(vector<int>& nums1, vector<int>& nums2);
@@ -163,6 +160,24 @@ public:
     int question52(int n);
     void question37(vector<vector<char>>& board);
     vector<vector<int>> question216(int k, int n);
+    vector<vector<string>> question126(string beginWord, string endWord, vector<string>& wordList);
+
+    /*动态规划 Dynamic Programme*/
+    /*解题思路
+     * 1.确定dp数组以及其下标的含义
+     * 2.确定递推公式
+     * 3.dp数组如何初始化
+     * 4.确定遍历顺序
+     * 5.举例推导dp数组
+     */
+    int question509(int n);
+    int question70(int n);
+    int question746(vector<int>& cost);
+    int question62(int m, int n);
+    int question63(vector<vector<int>>& obstacleGrid);
+
+    /*******/
+
 
     template<typename T1, typename T2>
     void quickSort(T1& array, int low, int high);
@@ -226,6 +241,7 @@ private:
     void helper52(int &ans, vector<string> solution, vector<pair<int, int>>& dir, int cnt);
     void helper37(vector<vector<bool>>& line, vector<vector<bool>>& column, vector<vector<vector<bool>>>& block, vector<pair<int, int>>& spaces, bool& valid, vector<vector<char>>& board, int pos);
     void helper216(vector<vector<int>>& ans, int& cur, int& k, int& n, vector<int>& perm);
+    void helper126(vector<vector<string>> &res, const string &Node, unordered_map<string, set<string>> &from, vector<string> &path);
 };
 
 #endif //DATASTRUCTURE_MULTIQUESTIONS_H
