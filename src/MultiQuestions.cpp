@@ -1240,10 +1240,7 @@ int MultiQuestions::question96(int n)
     return G[n];
 }
 
-bool MultiQuestions::question416(vector<int> &nums)
-{
-    return true;
-}
+
 
 bool MultiQuestions::question141(ListNode *head)
 {
@@ -4762,4 +4759,218 @@ vector<vector<string>> MultiQuestions::question126(string beginWord, string endW
         helper126(res, endWord, from, Path);
     }
     return res;
+}
+
+int MultiQuestions::backpack01Problem(vector<pair<int, int>> items, int bagWeight)
+{
+/* 问题描述：01背包问题
+ * 有n件物品和一个最多能装重量为w的背包，第i件物品的重量是weight[i]，得到的价值是value[i]。每个物体只能用一次，求解将那些物品装入背包价值总和最大
+ * 解题过程：
+ * 1.确定dp数组以及下表的含义
+ *  对于背包问题，有一种写法是使用二维数组，dp[i][j]表示从下标为[0-i]的物品中任意选取，放进容量为j的背包，价值总和最大是多少
+ * 2.确定递推公式
+ *  可以从两个方向推出来dp[i][j]:
+ *  ·不放物品i：由dp[i - 1][j]推出，即背包容量为j，里面不放物品i的最大价值，此时dp[i][j]就是dp[i - 1][j]。
+ *  ·放物品i：由dp[i - 1][j - weight[i]]推出，dp[i - 1][j - weight[i]]为背包容量为j - weight[i]时不放物品i的最大价值，
+ *   那么dp[i - 1][j - weight[i]] + value[i]就是背包放物品i得到的最大价值
+ *   递推公式为：dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i])
+ */
+    vector<vector<int>> dp(items.size(), vector<int>(bagWeight + 1, 0));
+    for(int j = items[0].first; j <= bagWeight; ++j)
+    {
+        dp[0][j] = items[0].second;
+    }
+
+    for(int i = 1; i < items.size(); ++i)
+    {
+        for(int j = 0; j <= bagWeight; ++j)
+        {
+            if(j < items[i].first)
+            {
+                dp[i][j] = dp[i - 1][j];
+            }
+            else
+            {
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - items[i].first] + items[i].second);
+            }
+        }
+    }
+
+    return dp[items.size() - 1][bagWeight];
+}
+
+bool MultiQuestions::question416(vector<int> &nums)
+{
+    /*
+     * 问题本质：集合nums中能否出现和为sum / 2的子集
+     * 01背包解法：背包容量为sum / 2；背包中要放入的商品重量为元素的数值，价值也为元素的数值
+     */
+    int sum = 0;
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        sum += nums[i];
+    }
+    if(sum % 2 == 1)
+    {
+        return false;
+    }
+    vector<int> dp((sum / 2) + 1, 0);
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        for(int j = (sum / 2); j >= nums[i]; --j)
+        {
+            dp[j] = max(dp[j], dp[j - nums[i]] + nums[i]);
+        }
+    }
+    if(dp[sum / 2] == sum / 2)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool MultiQuestions::helper698(vector<int>& nums, vector<bool> &dp, int& target, int s, int sum)
+{
+    if(s == 0)
+    {
+        return true;
+    }
+    if(!dp[s])
+    {
+        return dp[s];
+    }
+    dp[s] = false;
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        if(nums[i] + sum > target)
+        {
+            break;
+        }
+        if((s >> i) & 1)
+        {
+            if(helper698(nums, dp, target, (s ^ (1 << i)), (sum + nums[i]) % target))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool MultiQuestions::question698(vector<int>& nums, int k)
+{
+    int sum = 0;
+    int n = nums.size();
+    for(int i = 0; i < n; ++i)
+    {
+        sum += nums[i];
+    }
+    if(sum % k != 0)
+    {
+        return false;
+    }
+    int target = sum / k;
+    vector<bool> dp(1 << n, true);
+    sort(nums.begin(), nums.end());
+    return helper698(nums, dp, target, (1 << n) - 1, 0);
+}
+
+bool MultiQuestions::helper473(vector<int> &nums, vector<bool> &dp, int &target, int s, int sum)
+{
+    if(s == 0)
+    {
+        return true;
+    }
+    if(!dp[s])
+    {
+        return dp[s];
+    }
+    dp[s] = false;
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        if(nums[i] + sum > target)
+        {
+            break;
+        }
+        if((s >> i) & 1)
+        {
+            if(helper473(nums, dp, target, (s ^ (1 << i)), (sum + nums[i]) % target))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool MultiQuestions::question473(vector<int> &matchsticks)
+{
+    int n = matchsticks.size();
+    int sum = 0;
+    for(int i = 0; i < matchsticks.size(); ++i)
+    {
+        sum += matchsticks[i];
+    }
+    if(sum % 4 != 0)
+    {
+        return false;
+    }
+    int target = sum / 4;
+    vector<bool> dp(1 << n, false);
+    sort(matchsticks.begin(), matchsticks.end());
+
+    return helper473(matchsticks, dp, target, (1 << n) - 1, 0);
+}
+
+int MultiQuestions::question494(vector<int> &nums, int target)
+{
+    int sum = 0;
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        sum += nums[i];
+    }
+    if((sum + target) % 2 != 0 || target > sum)
+    {
+        return 0;
+    }
+    int plusSum = (sum + target) / 2;
+    vector<int> dp(plusSum + 1, 0);
+    dp[0] = 1;
+
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        for(int j = plusSum; j >= nums[i]; --j)
+        {
+            dp[j] = dp[j - nums[i]];
+        }
+    }
+    return dp[plusSum];
+}
+
+int MultiQuestions::question1049(vector<int> &stones)
+{
+    //尽量让石头分成两堆，两堆的质量尽量接近
+    int sum = 0;
+    for(int i = 0; i < stones.size(); ++i)
+    {
+        sum += stones[i];
+    }
+    int target = sum / 2;
+    vector<int> dp(target + 1, 0);
+
+    for(int i = 0; i < stones.size(); ++i)
+    {
+        for(int j = target; j >= stones[i]; --j)
+        {
+            dp[j] = max(dp[j], dp[j - stones[i]] + stones[i]);
+        }
+    }
+
+    return sum - dp[target] - dp[target];
+}
+
+int MultiQuestions::question474(vector<std::string> &strs, int m, int n)
+{
+    return 0;
 }

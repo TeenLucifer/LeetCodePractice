@@ -40,7 +40,6 @@ public:
     vector<int> question1(vector<int>& nums, int target);
 
 
-    int question343(int n);
     void question88(vector<int>& nums1, int m, vector<int>& nums2, int n);
     vector<int> question350(vector<int>& nums1, vector<int>& nums2);
     int question121(vector<int>& prices);
@@ -51,8 +50,6 @@ public:
     int question387(string s);
     bool question383(string ransomNote, string magazine);
     bool question242(string s, string t);
-    int question96(int n);
-    bool question416(vector<int>& nums);
     bool question141(ListNode* head);
     ListNode* question21(ListNode* head1, ListNode* head2);
     ListNode* question203(ListNode* head, int val);
@@ -175,7 +172,15 @@ public:
     int question746(vector<int>& cost);
     int question62(int m, int n);
     int question63(vector<vector<int>>& obstacleGrid);
-
+    int question343(int n);
+    int question96(int n);
+    int backpack01Problem(vector<pair<int, int>> items, int bagWeight);
+    bool question416(vector<int>& nums);
+    bool question698(vector<int>& nums, int k);
+    bool question473(vector<int>& matchsticks);
+    int question494(vector<int>& nums, int target);
+    int question1049(vector<int>& stones);
+    int question474(vector<string>& strs, int m, int n);
     /*******/
 
 
@@ -242,6 +247,8 @@ private:
     void helper37(vector<vector<bool>>& line, vector<vector<bool>>& column, vector<vector<vector<bool>>>& block, vector<pair<int, int>>& spaces, bool& valid, vector<vector<char>>& board, int pos);
     void helper216(vector<vector<int>>& ans, int& cur, int& k, int& n, vector<int>& perm);
     void helper126(vector<vector<string>> &res, const string &Node, unordered_map<string, set<string>> &from, vector<string> &path);
+    bool helper698(vector<int>& nums, vector<bool>& dp, int& target, int s, int sum);
+    bool helper473(vector<int>& nums, vector<bool>& dp, int& target, int s, int sum);
 };
 
 #endif //DATASTRUCTURE_MULTIQUESTIONS_H
