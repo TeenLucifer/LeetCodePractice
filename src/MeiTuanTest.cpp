@@ -10,7 +10,7 @@ MeiTuanTest::MeiTuanTest()
 MeiTuanTest::~MeiTuanTest()
 {}
 
-int MeiTuanTest::dfs_Q1(vector<pair<int, int>>& link, int root, int length)
+int MeiTuanTest::dfs_Q1(vector<pair<int, int>>& link, int root, int length)//最长路径
 {
     int max_length = 0;
     for(int i = 0; i < link.size(); ++i)
@@ -35,7 +35,7 @@ int MeiTuanTest::dfs_Q1(vector<pair<int, int>>& link, int root, int length)
     return max_length;
 }
 
-int MeiTuanTest::question1()
+int MeiTuanTest::question1()//最长路径
 {
     int n;
     cin >> n;
@@ -55,7 +55,7 @@ int MeiTuanTest::question1()
     return 0;
 }
 
-int MeiTuanTest::question2()
+int MeiTuanTest::question2()//排座位
 {
     int n, m, a;
     cin >> n >> m >> a;
@@ -91,7 +91,7 @@ int MeiTuanTest::question2()
     return 0;
 }
 
-int MeiTuanTest::question3()
+int MeiTuanTest::question3()//水果打包，动态规划
 {
     int n, m, s;
     cin >> n >> m >> s;
@@ -120,7 +120,7 @@ int MeiTuanTest::question3()
     return 0;
 }
 
-int MeiTuanTest::question4(int back_size, vector<int>& nums, vector<int>& values)
+int MeiTuanTest::question4(int back_size, vector<int>& nums, vector<int>& values)//动态规划，经典背包问题，使用一维dp数组
 {
     int n = nums.size();
     vector<int> dp(back_size + 1, 0);

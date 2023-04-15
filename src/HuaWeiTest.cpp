@@ -10,7 +10,7 @@ HuaWeiTest::HuaWeiTest()
 HuaWeiTest::~HuaWeiTest()
 {}
 
-int HuaWeiTest::question1()
+int HuaWeiTest::question1()//字符串最后一个单词长度
 {
     string str;
     do
@@ -22,7 +22,7 @@ int HuaWeiTest::question1()
     return 0;
 }
 
-int HuaWeiTest::question2()
+int HuaWeiTest::question2()//计算某字符出现的字数
 {
     string str;
     char ch;
@@ -42,7 +42,7 @@ int HuaWeiTest::question2()
     return 0;
 }
 
-int HuaWeiTest::question3()
+int HuaWeiTest::question3()//字符串分隔
 {
     string str;
     int strLength = 0;
@@ -71,7 +71,7 @@ int HuaWeiTest::question3()
     return 0;
 }
 
-int HuaWeiTest::question4(int n)
+int HuaWeiTest::question4(int n)//斐波那契数列//DP
 {
     if(n == 0)
     {
@@ -94,7 +94,7 @@ int HuaWeiTest::question4(int n)
     return dp[n];
 }
 
-int HuaWeiTest::question5(int n)
+int HuaWeiTest::question5(int n)//爬楼梯
 {
     if(n == 0)
     {
@@ -117,7 +117,7 @@ int HuaWeiTest::question5(int n)
     return dp[n];
 }
 
-int HuaWeiTest::question6(vector<int> &cost)
+int HuaWeiTest::question6(vector<int> &cost)//使用最小花费爬楼梯
 {
     int n = cost.size();
     if(n == 0)
@@ -137,7 +137,7 @@ int HuaWeiTest::question6(vector<int> &cost)
     return dp[n];
 }
 
-int HuaWeiTest::question7(int m, int n)
+int HuaWeiTest::question7(int m, int n)//机器人路径
 {
     vector<vector<int>> dp(m, vector<int>(n));
     dp[0][0] = 1;
@@ -170,7 +170,7 @@ int HuaWeiTest::question7(int m, int n)
     return dp[m - 1][n - 1];
 }
 
-int HuaWeiTest::question8()
+int HuaWeiTest::question8()//购物单//DP的背包问题
 {
     int total_money;
     int total_num;
@@ -208,7 +208,7 @@ int HuaWeiTest::question8()
     return 0;
 }
 
-bool HuaWeiTest::question9(vector<int> &nums)
+bool HuaWeiTest::question9(vector<int> &nums)//分割等和子集//背包问题
 {
     int sum = 0;
     for(int i = 0; i < nums.size(); ++i)
@@ -252,7 +252,7 @@ bool HuaWeiTest::question9(vector<int> &nums)
     return false;
 }
 
-int HuaWeiTest::question10()
+int HuaWeiTest::question10()//经典背包问题
 {
     vector<int> weights = {1, 3, 4};
     vector<int> values = {15, 20, 30};
