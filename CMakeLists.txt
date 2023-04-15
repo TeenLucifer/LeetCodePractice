@@ -16,4 +16,4 @@ add_executable(
         src/MinStack.cpp
         src/AVL.cpp
         src/RedBlackTree.cpp
-)
+        src/BaiDuTest.cpp include/BaiDuTest.h src/HuaWeiTest.cpp include/HuaWeiTest.h src/MeiTuanTest.cpp include/MeiTuanTest.h)
